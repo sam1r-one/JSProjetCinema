@@ -1,0 +1,48 @@
+footer {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    background-color: black;
+    color: white;
+}
+
+header {
+    font:
+            bold 7vw Arial,
+            sans-serif;
+}
+
+#menu {
+    list-style-type: none;
+    display: flex;
+    padding: 0;
+    margin-bottom: 0;
+    gap: 1em;
+}
+
+nav {
+    border-bottom: 1px solid black;
+}
+
+.crumbs ol {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.crumb {
+    display: inline-block;
+}
+
+.crumb a::after {
+    display: inline-block;
+    color: black;
+    content: ">";
+    font-size: 80%;
+    font-weight: bold;
+    padding: 0 3px;
+}
+
+.crumb a:hover {
+    color: black;
+    text-decoration: underline;
+}
