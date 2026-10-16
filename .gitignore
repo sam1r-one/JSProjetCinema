@@ -1,3 +1,4 @@
 .idea/
-flaskCine/main.py
-flaskCine/main.py
+flaskCine/.idea/
+flaskCine/.venv/
+flaskCine/config.env
