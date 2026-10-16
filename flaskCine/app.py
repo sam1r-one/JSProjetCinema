@@ -28,9 +28,22 @@ def home():
                    "FROM seance JOIN film ON seance.id_film = film.id_film JOIN salle ON seance.id_salle = salle.id_salle WHERE seance.date_heure >= NOW() ORDER BY seance.date_heure ASC LIMIT 1;")
             cursor.execute(sql)
             seance = cursor.fetchone()
+        print(seance)
+        return jsonify({
+            "status": "succès",
+            "message": "connexion BDD réussie !",
+            "donnees": seance
+        }),200
 
-    if seance is None:
+    except pymysql.MySQLError as error:
+        return jsonify({
+            "status": "erreur",
+            "message": f"Impossible de connexion ! {str(error)}"
+        }),500
 
+    finally:
+        if connection and connection.open:
+            connection.close()
 
 if __name__ == '__main__':
     app.run()
