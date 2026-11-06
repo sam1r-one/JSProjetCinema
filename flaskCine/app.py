@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 import pymysql
 import pymysql.cursors
 from config import Config
@@ -45,5 +45,24 @@ def home():
         if connection and connection.open:
             connection.close()
 
+@app.route('/film/<int:id_film>')
+def film(id_film):
+    connection = None
+    try:
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            sql = "SELECT id_film, nom_film, duree, interdit_16, langue, resume FROM film WHERE id_film = %s;"
+            cursor.execute(sql, (id_film,));
+            film = cursor.fetchone()
+
+        print(f"Film récuperer : {film}")
+        return render_template("film.html", film=film)
+
+    except pymysql.MySQLError as error:
+        return f'Erreur BDD {(error)}',500
+    finally:
+        if connection and connection.open:
+            connection.close()
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
