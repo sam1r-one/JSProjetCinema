@@ -15,23 +15,31 @@ def get_db_connection():
         database=Config.DB_NAME,
         cursorclass=pymysql.cursors.DictCursor
     )
-
 @app.route('/')
+@app.route('/seances')
 def home():
     connection = None
     try:
         connection = get_db_connection()
         with connection.cursor() as cursor:
-            sql = ("SELECT seance.id_seance, "
-                   "seance.date_heure, "
-                   "seance.version_langue, "
-                   "film.nom_film, film.resume, "
-                   "salle.numero_salle "
-                   "FROM seance JOIN film ON seance.id_film = film.id_film JOIN salle ON seance.id_salle = salle.id_salle WHERE seance.date_heure >= NOW() ORDER BY seance.date_heure ASC LIMIT 1;")
+            sql = """
+                  SELECT seance.id_seance,
+                         seance.date_heure,
+                         seance.version_langue,
+                         film.id_film,
+                         film.nom_film,
+                         salle.numero_salle
+                  FROM seance
+                  JOIN film ON seance.id_film = film.id_film
+                  JOIN salle ON seance.id_salle = salle.id_salle
+                  WHERE seance.date_heure >= NOW()
+                  ORDER BY seance.date_heure ASC;
+                  """
             cursor.execute(sql)
-            films = cursor.fetchone()
-        print(films)
-        return render_template("index.html", films=films)
+            seances = cursor.fetchall()
+
+            return render_template("seances.html", seances=seances)
+
     except pymysql.MySQLError as error:
         return f'Erreur BDD {error}', 500
 
@@ -46,14 +54,14 @@ def film(id_film):
         connection = get_db_connection()
         with connection.cursor() as cursor:
             sql = "SELECT id_film, nom_film, duree, interdit_16, langue, resume FROM film WHERE id_film = %s;"
-            cursor.execute(sql, (id_film,));
+            cursor.execute(sql, (id_film,))
             film = cursor.fetchone()
 
         print(f"Film récuperer : {film}")
         return render_template("film.html", film=film)
 
     except pymysql.MySQLError as error:
-        return f'Erreur BDD {(error)}',500
+        return f'Erreur BDD {error}',500
     finally:
         if connection and connection.open:
             connection.close()
@@ -71,26 +79,31 @@ def getseance(numSalle):
                            JOIN film ON seance.id_film = film.id_film
                            JOIN salle ON seance.id_salle = salle.id_salle
                   WHERE salle.numero_salle = %s
-                    AND seance.date_heure >= NOW()
-                  ORDER BY seance.date_heure ASC; \
+                    AND DATE(seance.date_heure) = CURDATE()
+                  ORDER BY seance.date_heure ASC;
                   """
-            cursor.execute(sql, (numSalle,));
-            result = cursor.fetchall();
+            cursor.execute(sql, (numSalle,))
+            result = cursor.fetchall()
 
-        liste_seance = [];
-        for row in result:
+        liste_seance = []
+        for seance in result:
+            if seance["interdit_16"] == 1:
+                interdiction = "16"
+            else:
+                interdiction = "0"
+
             seance_formatee = {
-                "horaire": row["date_heure"].strftime("%Hh%M"),
-                "titre":  row["nom_film"],
-                "version" : row["version_langue"],
-                "interdit_16" : "16" if row["interdit_16"] else "0",
+                "horaire": seance["date_heure"].strftime("%Hh%M"),
+                "titre": seance["nom_film"],
+                "version": seance["version_langue"],
+                "interdit_16": interdiction
             }
             liste_seance.append(seance_formatee)
 
         return jsonify(liste_seance)
 
     except pymysql.MySQLError as error:
-        return f'Erreur BDD {(error)}',500
+        return f'Erreur BDD {error}',500
     finally:
         if connection and connection.open:
             connection.close()
