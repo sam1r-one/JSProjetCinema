@@ -22,6 +22,8 @@ def home():
     try:
         connection = get_db_connection()
         with connection.cursor() as cursor:
+            cursor.execute("UPDATE seance SET date_heure = CONCAT(CURDATE(), ' ', TIME(date_heure));")
+            connection.commit()
             sql = """
                   SELECT seance.id_seance,
                          seance.date_heure,
