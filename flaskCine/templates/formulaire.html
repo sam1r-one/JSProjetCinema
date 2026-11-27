@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Nouvelle séance{% endblock %}
+
+{% block contenu %}
+<h2>Saisie d'une nouvelle séance</h2>
+
+<form action="/traitement" method="POST">
+    <div>
+        <label for="titre">Titre du film :</label><br>
+        <input type="text" id="titre" name="titre" required>
+    </div>
+
+    <div>
+        <label for="duree">Durée (en minutes) :</label><br>
+        <input type="number" id="duree" name="duree" min="1" step="1" required>
+    </div>
+
+    <div>
+        <label for="langue">Langue :</label><br>
+        <select id="langue" name="langue">
+            <option value="FR">Français</option>
+            <option value="VOSTFR">VOSTFR</option>
+            <option value="EN">Anglais</option>
+            <option value="ES">Espagnol</option>
+        </select>
+    </div>
+
+    <div>
+        <label>
+            <input type="checkbox" id="interdiction_16" name="interdiction_16" value="oui">
+            Interdiction au moins de 16 ans
+        </label>
+    </div>
+
+    

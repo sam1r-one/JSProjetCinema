@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Cinéma{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>Cinéma</h1>
+        <nav>
+            <a href="/">Accueil</a> |
+            <a href="/form">Nouvelle séance</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block contenu %}{% endblock %}
+    </main>
+</body>
+</html>
