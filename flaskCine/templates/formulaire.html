@@ -1,24 +1,24 @@
-{% extends "base.html" %}
+{% extends "base_admin.html" %}
 
-{% block title %}Nouvelle séance{% endblock %}
+{% block title %}Ajouter une séance - Gestion du site{% endblock %}
 
 {% block contenu %}
-<h2>Saisie d'une nouvelle séance</h2>
+<h3>Saisie d'une nouvelle séance</h3>
 
-<form action="/traitement" method="POST">
-    <div>
-        <label for="titre">Titre du film :</label><br>
-        <input type="text" id="titre" name="titre" required>
+<form action="/traitement" method="POST" class="mt-3">
+    <div class="mb-3">
+        <label for="titre" class="form-label">Titre du film :</label>
+        <input type="text" class="form-control" id="titre" name="titre" required>
     </div>
 
-    <div>
-        <label for="duree">Durée (en minutes) :</label><br>
-        <input type="number" id="duree" name="duree" min="1" step="1" required>
+    <div class="mb-3">
+        <label for="duree" class="form-label">Durée (en minutes) :</label>
+        <input type="number" class="form-control" id="duree" name="duree" min="1" step="1" required>
     </div>
 
-    <div>
-        <label for="langue">Langue :</label><br>
-        <select id="langue" name="langue">
+    <div class="mb-3">
+        <label for="langue" class="form-label">Langue :</label>
+        <select class="form-select" id="langue" name="langue">
             <option value="FR">Français</option>
             <option value="VOSTFR">VOSTFR</option>
             <option value="EN">Anglais</option>
@@ -26,11 +26,23 @@
         </select>
     </div>
 
-    <div>
-        <label>
-            <input type="checkbox" id="interdiction_16" name="interdiction_16" value="oui">
-            Interdiction au moins de 16 ans
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="interdiction_16" name="interdiction_16" value="oui">
+        <label class="form-check-label" for="interdiction_16">
+            Interdiction moins de 16 ans
         </label>
     </div>
 
-    
+    <div class="mb-3">
+        <label for="resume" class="form-label">Résumé :</label>
+        <textarea class="form-control" id="resume" name="resume" rows="4"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label for="affiche" class="form-label">Affiche :</label>
+        <input type="text" class="form-control" id="affiche" name="affiche">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+</form>
+{% endblock %}

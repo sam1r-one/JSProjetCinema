@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Gestion du site - Cinéma Multiplexe du Castor{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<header class="bg-black">
+    <img src="{{ url_for('static', filename='images/banner.png') }}" class="img-fluid" alt="Gestion du site"/>
+</header>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuAdmin">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menuAdmin">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/film/1">Voir les films</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/form">Ajouter un film</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/seances">Voir les séances</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div id="main" class="container mt-4 mb-4">
+    <h1 class="text-danger fw-bold">Cinéma multiplexe du Castor</h1>
+    <h2 class="h5 text-muted mb-4">Gestion du site</h2>
+
+    {% block contenu %}{% endblock %}
+</div>
+
+<footer class="pied mt-auto py-3 bg-light text-center">
+    BTS CIEL Simone de Beauvoir, 2026
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+</html>

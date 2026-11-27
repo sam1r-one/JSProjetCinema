@@ -1,6 +1,6 @@
 from time import strftime
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 import pymysql
 import pymysql.cursors
 from config import Config
@@ -16,6 +16,8 @@ def get_db_connection():
         cursorclass=pymysql.cursors.DictCursor
     )
 @app.route('/')
+def accueil():
+    return render_template("index.html")
 @app.route('/seances')
 def home():
     connection = None
@@ -38,9 +40,9 @@ def home():
                   ORDER BY seance.date_heure ASC;
                   """
             cursor.execute(sql)
-            seances = cursor.fetchall()
+            seances_liste = cursor.fetchall()
 
-            return render_template("seances.html", seances=seances)
+            return render_template("seances.html", seances=seances_liste)
 
     except pymysql.MySQLError as error:
         return f'Erreur BDD {error}', 500
@@ -109,6 +111,38 @@ def getseance(numSalle):
     finally:
         if connection and connection.open:
             connection.close()
+@app.route("/form", methods=["GET"])
+def afficher_formulaire():
+    return render_template("formulaire.html")
+
+@app.route("/traitement", methods=["POST"])
+def traitement():
+    titre = request.form.get("titre", "").strip()
+    duree = request.form.get("duree", "").strip()
+    langue = request.form.get("langue", "").strip()
+    interdiction_16 = request.form.get("interdiction_16") is not None
+    resume = request.form.get("resume", "").strip()
+    affiche = request.form.get("affiche", "").strip()
+
+    print(f"Titre: {titre}")
+    print(f"Duree: {duree}")
+    print(f"Langue: {langue}")
+    print(f"Interdit_16: {interdiction_16}")
+    print(f"Resume: {resume}")
+    print(f"Affiche: {affiche}")
+
+    message = f"Le film {titre} est enregistré"
+
+    return render_template(
+        "traitement.html",
+        message=message,
+        titre=titre,
+        duree=duree,
+        langue=langue,
+        interdiction_16=interdiction_16,
+        resume=resume,
+        affiche=affiche,
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)
